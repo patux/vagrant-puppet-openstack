@@ -7,18 +7,28 @@ VAGRANTFILE_API_VERSION = "2"
 
 # Explicitly define all puppet module version for openstack that we want
 $install_puppet_modules = <<SCRIPT
-/usr/local/bin/puppet module install puppetlabs-openstack  --version 4.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+[ -d /etc/puppetlabs/puppet/modules/openstack ] && rm -rf /etc/puppetlabs/puppet/modules/openstack || :
+/usr/local/bin/puppet module install puppetlabs-openstack  --version 5.0.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+#[ -d /etc/puppetlabs/puppet/modules/openstack ] && rm -rf /etc/puppetlabs/puppet/modules/openstack || :
+#/usr/bin/git clone https://github.com/puppetlabs/puppetlabs-openstack.git /etc/puppetlabs/puppet/modules/openstack
+#cd /etc/puppetlabs/puppet/modules/openstack && /usr/bin/git checkout 4.1.0 && cd -
 /usr/local/bin/puppet module install dprince-qpid          --version 1.0.2 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install duritong-sysctl       --version 0.0.4 --force --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install garethr-erlang        --version 0.3.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
-/usr/local/bin/puppet module install puppetlabs-apache     --version 1.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+#/usr/local/bin/puppet module install puppetlabs-apache     --version 1.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+[ -d /etc/puppetlabs/puppet/modules/apache ] && rm -rf /etc/puppetlabs/puppet/modules/apache || :
+/usr/bin/git clone https://github.com/puppetlabs/puppetlabs-apache.git /etc/puppetlabs/puppet/modules/apache 
+cd /etc/puppetlabs/puppet/modules/apache && /usr/bin/git checkout  1.1.0 && cd -
 /usr/local/bin/puppet module install puppetlabs-ceilometer --version 4.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-cinder     --version 4.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-glance     --version 4.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-heat       --version 4.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-horizon    --version 4.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-keystone   --version 4.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
-/usr/local/bin/puppet module install puppetlabs-rabbitmq   --version 3.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+#/usr/local/bin/puppet module install puppetlabs-rabbitmq   --version 3.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+[ -d /etc/puppetlabs/puppet/modules/rabbitmq ] && rm -rf /etc/puppetlabs/puppet/modules/rabbitmq || :
+/usr/bin/git clone https://github.com/puppetlabs/puppetlabs-rabbitmq.git /etc/puppetlabs/puppet/modules/rabbitmq
+cd /etc/puppetlabs/puppet/modules/rabbitmq  && /usr/bin/git checkout  3.1.0 && cd -
 /usr/local/bin/puppet module install puppetlabs-mongodb    --version 0.8.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-mysql      --version 2.3.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-neutron    --version 4.2.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
@@ -30,10 +40,14 @@ $install_puppet_modules = <<SCRIPT
 /usr/local/bin/puppet module install puppetlabs-vswitch    --version 0.3.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install puppetlabs-xinetd     --version 1.3.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
 /usr/local/bin/puppet module install saz-memcached         --version 2.5.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
-/usr/local/bin/puppet module install saz-ssh               --version 1.4.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
-/usr/local/bin/puppet module install stahnma-epel          --version 0.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
-/usr/local/bin/puppet module install puppetlabs-ntp        --version 3.0.3 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
-# hackery needed to get the module version above to play nice
+#/usr/local/bin/puppet module install saz-ssh               --version 1.4.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+[ -d /etc/puppetlabs/puppet/modules/ssh ] && rm -rf /etc/puppetlabs/puppet/modules/ssh || :
+/usr/bin/git clone https://github.com/saz/puppet-ssh.git /etc/puppetlabs/puppet/modules/ssh 
+cd /etc/puppetlabs/puppet/modules/ssh  && /usr/bin/git checkout v1.4.0 && cd -
+#/usr/local/bin/puppet module install stahnma-epel          --version 0.1.0 --ignore-dependencies --modulepath '/etc/puppetlabs/puppet/modules'
+[ -d /etc/puppetlabs/puppet/modules/epel ] && rm -rf /etc/puppetlabs/puppet/modules/epel || :
+/usr/bin/git clone https://github.com/stahnma/puppet-module-epel.git /etc/puppetlabs/puppet/modules/epel
+cd /etc/puppetlabs/puppet/modules/epel  && /usr/bin/git checkout 0.1.0  && cd -
 chmod u+w /etc/puppetlabs/puppet/modules/openstack/metadata.json
 sed -i -e 's@duritong/sysctl\",\"version_requirement\":\"@duritong/sysctl\",\"version_requirement\":\"\>=@g' /etc/puppetlabs/puppet/modules/openstack/metadata.json
 SCRIPT
@@ -70,14 +84,35 @@ $add_nodes = <<SCRIPT
 /opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production node:add[storage.localnet,,openstack::role::storage,skip]
 SCRIPT
 
+
 Vagrant.configure('2') do |config|
+  
+  if Vagrant.has_plugin?("vagrant-cachier")
+    # Configure cached packages to be shared between instances of the same base box.
+    # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
+    config.cache.scope = :machine
+
+    # OPTIONAL: If you are using VirtualBox, you might want to use that to enable
+    # NFS for shared folders. This is also very useful for vagrant-libvirt if you
+    # want bi-directional sync
+    config.cache.synced_folder_opts = {
+      type: :nfs,
+      # The nolock option can be useful for an NFSv3 client that wants to avoid the
+      # NLM sideband protocol. Without this option, apt-get might hang if it tries
+      # to lock files needed for /var/cache/* operations. All of this can be avoided
+      # by using NFSv4 everywhere. Please note that the tcp option is not the default.
+      mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
+    }
+    # For more information please check http://docs.vagrantup.com/v2/synced-folders/basic_usage.html
+  end
   config.vm.box                      = 'centos-64-x64-vbox4210-nocm'
   config.vm.box_url                  = 'http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box'
-  config.pe_build.download_root      = 'https://s3.amazonaws.com/pe-builds/released'
+  config.pe_build.download_root      = 'https://s3.amazonaws.com/artifacts.chimpy.us/tarballs'
   config.pe_build.version            = '3.2.3'
   config.pe_build.filename           = 'puppet-enterprise-3.2.3-el-6-x86_64.tar.gz'
 
   config.vm.provision 'shell', inline: 'yum update -y'
+  config.vm.provision 'shell', inline: 'yum install git -y'
   # Only here to assist with initial provitioning of machines. After puppet agent run iptables is reenabled and started 
   config.vm.provision 'shell', inline: 'chkconfig iptables off'
   config.vm.provision 'shell', inline: 'service iptables stop'
